@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thessaloniki Metro — Countdown</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121938cc;
+      --fg: #e9ecf1;
+      --muted: #a9b1c3;
+      --accent: #7cc4ff;
+      --accent-2: #9bffd6;
+      --danger: #ff7c7c;
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f8fc;
+        --card: #ffffff;
+        --fg: #0b1020;
+        --muted: #5c6476;
+        --accent: #1769ff;
+        --accent-2: #0aa378;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: radial-gradient(1000px 500px at 20% 0%, #1a2244 0%, var(--bg) 40%), var(--bg);
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 24px 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.3);
+    }
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .sub {
+      color: var(--muted);
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    }
+    .row {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .tile {
+      flex: 1;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      margin: 0 4px;
+      padding: 10px 0;
+    }
+    .num {
+      font-size: 2rem;
+      font-weight: bold;
+      line-height: 1.2;
+    }
+    .label {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+    .meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 16px;
+    }
+    .btn {
+      display: inline-block;
+      margin: 8px 4px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: transparent;
+      color: var(--fg);
+      font-size: 0.9rem;
+    }
+    .btn:active { opacity: 0.8; }
+    .celebrate {
+      display: none;
+      color: var(--accent-2);
+      font-weight: 700;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Thessaloniki Metro restart</h1>
+    <p class="sub">Countdown to <strong>11 December 2025, 06:30</strong> Greece time.</p>
+    <div class="row">
+      <div class="tile"><div class="num" id="days">0</div><div class="label">Days</div></div>
+      <div class="tile"><div class="num" id="hours">0</div><div class="label">Hours</div></div>
+      <div class="tile"><div class="num" id="minutes">0</div><div class="label">Min</div></div>
+      <div class="tile"><div class="num" id="seconds">0</div><div class="label">Sec</div></div>
+    </div>
+    <div class="meta" id="localInfo"></div>
+    <button class="btn" id="copyLink">Copy Link</button>
+    <button class="btn" id="addCalendar">Add to Calendar</button>
+    <div class="celebrate" id="celebrate">🚇 It’s metro time! Thessaloniki rolls again!</div>
+  </div>
+
+  <script>
+    const TARGET_ISO_UTC = '2025-12-11T04:30:00Z';
+    const target = new Date(TARGET_ISO_UTC);
+
+    const fmtLocal = new Intl.DateTimeFormat(undefined, { dateStyle: 'full', timeStyle: 'short' });
+    const fmtAthens = new Intl.DateTimeFormat('en-GB', { dateStyle: 'full', timeStyle: 'short', timeZone: 'Europe/Athens' });
+
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const infoEl = document.getElementById('localInfo');
+    const celebrate = document.getElementById('celebrate');
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = target - now;
+      if (diff <= 0) {
+        daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '0';
+        celebrate.style.display = 'block';
+        return;
+      }
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      daysEl.textContent = days;
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+      infoEl.textContent = `Event time: ${fmtAthens.format(target)} (your time: ${fmtLocal.format(target)})`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    document.getElementById('copyLink').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        alert('Link copied!');
+      } catch (_) {
+        alert('Could not copy link.');
+      }
+    });
+
+    document.getElementById('addCalendar').addEventListener('click', () => {
+      const dtStart = '20251211T063000';
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Metro Thessaloniki//Countdown//EN\nBEGIN:VEVENT\nUID:metro-thessaloniki-2025-12-11@local\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\..+/, 'Z')}\nSUMMARY:Thessaloniki Metro restart\nDTSTART;TZID=Europe/Athens:${dtStart}\nDTEND;TZID=Europe/Athens:20251211T073000\nDESCRIPTION:Thessaloniki Metro starts again.\nLOCATION:Thessaloniki, Greece\nEND:VEVENT\nEND:VCALENDAR`;
+      const blob = new Blob([ics], { type: 'text/calendar' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'thessaloniki-metro.ics';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
