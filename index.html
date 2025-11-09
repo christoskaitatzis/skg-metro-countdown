@@ -3,224 +3,196 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Thessaloniki Metro — Countdown</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <title>Thessaloniki Metro — 2025</title>
+  <!-- Fonts: Space Grotesk for headings/numbers, Inter for body -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg1: #0a1a33;
-      --bg2: #102a4d;
-      --bg3: #153f5f;
-      --accent: #48c6ef;
-      --accent-2: #6f86d6;
-      --fg: #f0f4ff;
-      --muted: #a8b3c9;
+      /* Matte dark palette */
+      --bg: #0f1217;         /* page background */
+      --bg-2: #161a21;       /* section cards */
+      --ink: #e8ecf3;        /* main text */
+      --muted: #9aa3b2;      /* secondary text */
+      --line: #232834;       /* separators */
+      --accent: #59c9ff;     /* cyan */
+      --accent-2: #6f86d6;   /* blue */
+      --glass: rgba(255,255,255,0.04);
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; overflow: hidden; }
+    html, body { height: 100%; }
+
     body {
-      font-family: 'Inter', sans-serif;
-      color: var(--fg);
-      background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), #0d223d);
-      background-size: 400% 400%;
-      animation: gradientShift 20s ease infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
     }
 
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(1100px, 92vw); margin: 0 auto; }
+
+    /* ---------- HERO ---------- */
+    header.hero {
+      padding: clamp(56px, 9vw, 120px) 0 28px;
+      position: relative;
     }
 
-    .container {
-      backdrop-filter: blur(20px);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 24px;
-      padding: 32px 20px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1.5s ease forwards 1s;
+    /* soft vignette spotlight (static) */
+    header.hero::before {
+      content: ""; position: absolute; inset: -10% -10% auto -10%; height: 60%;
+      background: radial-gradient(60% 60% at 50% 0%, rgba(89,201,255,0.12) 0%, rgba(111,134,214,0.10) 30%, transparent 70%);
+      pointer-events: none; z-index: 0;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .hero-inner { position: relative; z-index: 1; }
+
+    .kicker { color: var(--muted); letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; margin-bottom: 10px; }
+
+    h1.title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; letter-spacing: .5px;
+      font-size: clamp(36px, 7.5vw, 72px);
+      line-height: 1.05;
+      margin-bottom: 16px;
     }
 
-    h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: var(--accent);
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-      opacity: 0;
-      animation: fadeInText 2s ease forwards 1.2s;
+    .subtitle {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500; color: var(--muted);
+      font-size: clamp(16px, 2.4vw, 22px);
+      line-height: 1.4; max-width: 26ch;
     }
 
-    @keyframes fadeInText {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    /* Minimal metro line accent under title */
+    .metro-accent { margin-top: 28px; height: 16px; position: relative; }
+    .metro-accent::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; height: 2px; background: linear-gradient(90deg, rgba(89,201,255,.35), rgba(111,134,214,.35)); border-radius: 999px; }
+    .metro-accent .station { position: absolute; top: 2px; width: 8px; height: 8px; border-radius: 50%; background: radial-gradient(circle, var(--accent) 0%, rgba(89,201,255,.2) 70%, transparent 100%); box-shadow: 0 0 10px rgba(89,201,255,.4); }
+    .metro-accent .station:nth-child(1){ left: 6%; }
+    .metro-accent .station:nth-child(2){ left: 28%; }
+    .metro-accent .station:nth-child(3){ left: 52%; }
+    .metro-accent .station:nth-child(4){ left: 76%; }
 
-    .sub {
-      color: var(--muted);
-      font-size: 0.95rem;
-      margin-bottom: 30px;
-      font-family: 'Inter', sans-serif;
-    }
+    /* ---------- INFO SECTION ---------- */
+    section.info { padding: 32px 0 14px; }
+    .info-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 24px; align-items: start; }
+    @media (max-width: 860px){ .info-grid { grid-template-columns: 1fr; } }
 
-    .countdown {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
-      gap: 10px;
+    .card {
+      background: var(--bg-2); border: 1px solid var(--line); border-radius: 16px;
+      padding: clamp(16px, 3vw, 24px);
     }
+    .card h3 { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; }
+    .card p { color: var(--muted); line-height: 1.6; font-size: .98rem; }
+
+    .highlights { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; margin-top: 8px; }
+    .highlight { background: var(--glass); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .highlight strong { font-family: 'Space Grotesk'; font-size: 1.1rem; }
+    .highlight span { color: var(--muted); font-size: .9rem; display: block; }
+    @media (max-width: 520px){ .highlights { grid-template-columns: 1fr; } }
+
+    /* Divider */
+    .divider { height: 1px; background: var(--line); margin: 28px 0; }
+
+    /* ---------- COUNTDOWN SECTION ---------- */
+    section.countdown { padding: 22px 0 54px; }
+    .count-wrap { background: var(--bg-2); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+
+    .count-title { font-family: 'Space Grotesk'; font-weight: 600; margin-bottom: 12px; color: var(--muted); }
+
+    .tiles { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+    @media (max-width: 560px){ .tiles { grid-template-columns: repeat(2, minmax(0,1fr)); } }
 
     .tile {
-      flex: 1 1 45%;
-      background: rgba(255,255,255,0.08);
-      border-radius: 16px;
-      padding: 14px 0;
-      box-shadow: 0 0 10px rgba(72,198,239,0.15);
-      animation: fadeUp 1.5s ease forwards 1.5s;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--line);
+      border-radius: 14px; padding: 14px 10px; text-align: center;
     }
 
-    .num {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.6rem;
-      font-weight: 700;
-      color: var(--accent);
-      text-shadow: 0 0 12px rgba(72,198,239,0.7), 0 0 24px rgba(111,134,214,0.4);
-      animation: neonPulse 3s ease-in-out infinite;
-      opacity: 0;
-      animation-delay: 1.5s;
-      animation-name: fadeInText, neonPulse;
-      animation-duration: 2s, 3s;
-      animation-fill-mode: forwards, none;
-      animation-iteration-count: 1, infinite;
-    }
+    .num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(28px, 6.5vw, 56px); line-height: 1; color: var(--accent); text-shadow: 0 0 10px rgba(89,201,255,.6), 0 0 20px rgba(111,134,214,.35); animation: neonPulse 3s ease-in-out infinite; }
+    @keyframes neonPulse { 0%,100%{ text-shadow: 0 0 10px rgba(89,201,255,.55), 0 0 20px rgba(111,134,214,.3);} 50%{ text-shadow: 0 0 18px rgba(89,201,255,.9), 0 0 28px rgba(111,134,214,.5);} }
 
-    @keyframes neonPulse {
-      0%, 100% { text-shadow: 0 0 10px rgba(72,198,239,0.6), 0 0 20px rgba(111,134,214,0.3); }
-      50% { text-shadow: 0 0 18px rgba(72,198,239,0.9), 0 0 28px rgba(111,134,214,0.5); }
-    }
+    .label { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; margin-top: 6px; }
 
-    .label {
-      color: var(--muted);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      font-family: 'Inter', sans-serif;
-    }
+    .meta { margin-top: 14px; color: var(--muted); font-size: .92rem; }
 
-    .meta {
-      margin-top: 20px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
+    /* Buttons (carry over with subtle glow + pulse ripple) */
+    .actions { margin-top: 14px; }
+    .btn { position: relative; display: inline-block; margin: 8px 6px 0 0; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); color: var(--ink); font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: .02em; font-size: .95rem; transition: all .25s ease; overflow: hidden; }
+    .btn::before { content:""; position:absolute; inset:0; background: radial-gradient(60% 60% at 50% 50%, rgba(89,201,255,.18), rgba(111,134,214,.08) 60%, transparent 75%); opacity:.9; z-index:0; }
+    .btn:hover { border-color: rgba(89,201,255,.6); background: rgba(89,201,255,.1); box-shadow: 0 0 10px rgba(89,201,255,.35); color: var(--accent); }
+    .btn span { position: relative; z-index: 1; }
+    .pulse { position:absolute; pointer-events:none; border-radius:50%; background: radial-gradient(circle, rgba(89,201,255,.35) 0%, rgba(111,134,214,.15) 70%, transparent 100%); transform:scale(0); opacity:1; animation: pulseEffect .8s ease-out forwards; z-index: 0; }
+    @keyframes pulseEffect { to { transform: scale(3); opacity: 0; } }
 
-    .celebrate {
-      display: none;
-      margin-top: 20px;
-      font-size: 1rem;
-      font-weight: bold;
-      color: var(--accent-2);
-      text-shadow: 0 0 8px rgba(111,134,214,0.6);
-    }
-
-    .btn {
-      position: relative;
-      display: inline-block;
-      margin: 8px 4px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.05);
-      color: var(--fg);
-      font-size: 0.9rem;
-      font-family: 'Orbitron', sans-serif;
-      font-weight: 400;
-      letter-spacing: 0.03em;
-      transition: all 0.3s ease;
-      overflow: hidden;
-    }
-
-    .btn::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, rgba(72,198,239,0.25) 0%, rgba(111,134,214,0.1) 70%, transparent 100%);
-      z-index: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .btn span { position: relative; z-index: 2; }
-
-    .btn:hover {
-      background: rgba(72,198,239,0.15);
-      border-color: rgba(72,198,239,0.6);
-      color: var(--accent);
-      box-shadow: 0 0 12px rgba(72,198,239,0.4);
-    }
-
-    .pulse {
-      position: absolute;
-      pointer-events: none;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(72,198,239,0.35) 0%, rgba(111,134,214,0.15) 70%, transparent 100%);
-      transform: scale(0);
-      opacity: 1;
-      animation: pulseEffect 0.8s ease-out forwards;
-      z-index: 1;
-    }
-
-    @keyframes pulseEffect {
-      to {
-        transform: scale(3);
-        opacity: 0;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .num { font-size: 2rem; }
-      .tile { flex: 1 1 100%; }
-      h1 { font-size: 1.5rem; }
-    }
+    footer { padding: 22px 0 42px; color: var(--muted); font-size: .9rem; text-align: center; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Thessaloniki Metro 2025</h1>
-    <p class="sub">Countdown to <strong>11 December 2025, 06:30</strong> (Greece time)</p>
-
-    <div class="countdown">
-      <div class="tile"><div class="num" id="days">0</div><div class="label">Days</div></div>
-      <div class="tile"><div class="num" id="hours">0</div><div class="label">Hours</div></div>
-      <div class="tile"><div class="num" id="minutes">0</div><div class="label">Minutes</div></div>
-      <div class="tile"><div class="num" id="seconds">0</div><div class="label">Seconds</div></div>
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div class="kicker">Thessaloniki · Greece</div>
+      <h1 class="title">Thessaloniki Metro 2025</h1>
+      <p class="subtitle">After years of anticipation, Thessaloniki is on track to move again — connecting history, waterfront, and innovation.</p>
+      <div class="metro-accent" aria-hidden="true">
+        <span class="station"></span>
+        <span class="station"></span>
+        <span class="station"></span>
+        <span class="station"></span>
+      </div>
     </div>
+  </header>
 
-    <div class="meta" id="localInfo"></div>
+  <main>
+    <section class="info">
+      <div class="wrap info-grid">
+        <div class="card">
+          <h3>About the restart</h3>
+          <p>The Thessaloniki Metro brings frequent, reliable service through the city center and key neighborhoods. Fully automated trains, step‑free access, and modern stations will transform everyday mobility across the metropolitan area.</p>
+          <div class="divider"></div>
+          <div class="highlights">
+            <div class="highlight"><strong>13</strong><span>Stations</span></div>
+            <div class="highlight"><strong>9.6 km</strong><span>Main line (Phase A)</span></div>
+            <div class="highlight"><strong>Every 90s</strong><span>Peak frequency*</span></div>
+            <div class="highlight"><strong>Driverless</strong><span>Fully automated trains</span></div>
+          </div>
+          <p style="margin-top:10px; font-size:.8rem; color:var(--muted)">*Service plans subject to final operator schedule.</p>
+        </div>
+        <div class="card">
+          <h3>First morning service</h3>
+          <p>Service is planned to begin early in the morning. Make it to work, class, or the seafront right on time — and skip the traffic.</p>
+          <div class="divider"></div>
+          <p><strong>Launch morning:</strong><br/>11 December 2025, 06:30 (Greece time)</p>
+        </div>
+      </div>
+    </section>
 
-    <button class="btn" id="copyLink"><span>Copy Link</span></button>
-    <button class="btn" id="addCalendar"><span>Add to Calendar</span></button>
+    <section class="countdown" id="countdown">
+      <div class="wrap">
+        <div class="count-wrap">
+          <div class="count-title">Countdown to first departure</div>
+          <div class="tiles" role="timer" aria-live="polite">
+            <div class="tile"><div class="num" id="days">0</div><div class="label">Days</div></div>
+            <div class="tile"><div class="num" id="hours">0</div><div class="label">Hours</div></div>
+            <div class="tile"><div class="num" id="minutes">0</div><div class="label">Minutes</div></div>
+            <div class="tile"><div class="num" id="seconds">0</div><div class="label">Seconds</div></div>
+          </div>
+          <div class="meta" id="localInfo"></div>
+          <div class="actions">
+            <button class="btn" id="copyLink"><span>Copy Link</span></button>
+            <button class="btn" id="addCalendar"><span>Add to Calendar</span></button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    <div class="celebrate" id="celebrate">🚇 It’s metro time! Thessaloniki rolls again!</div>
-  </div>
+  <footer>
+    🚇 Thessaloniki Metro 2025 — Designed with pride.
+  </footer>
 
   <script>
+    // Target: 11 December 2025, 06:30 in Europe/Athens. Athens is UTC+02 in December → 04:30Z.
     const TARGET_ISO_UTC = '2025-12-11T04:30:00Z';
     const target = new Date(TARGET_ISO_UTC);
 
@@ -232,72 +204,56 @@
     const minutesEl = document.getElementById('minutes');
     const secondsEl = document.getElementById('seconds');
     const infoEl = document.getElementById('localInfo');
-    const celebrate = document.getElementById('celebrate');
 
-    function updateCountdown() {
+    function updateCountdown(){
       const now = new Date();
       const diff = target - now;
-      if (diff <= 0) {
-        daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '0';
-        celebrate.style.display = 'block';
-        return;
-      }
-      const totalSeconds = Math.floor(diff / 1000);
+      const done = diff <= 0;
+      const totalSeconds = Math.max(0, Math.floor(diff/1000));
       const days = Math.floor(totalSeconds / 86400);
       const hours = Math.floor((totalSeconds % 86400) / 3600);
       const minutes = Math.floor((totalSeconds % 3600) / 60);
       const seconds = totalSeconds % 60;
-      daysEl.textContent = days;
-      hoursEl.textContent = String(hours).padStart(2, '0');
-      minutesEl.textContent = String(minutes).padStart(2, '0');
-      secondsEl.textContent = String(seconds).padStart(2, '0');
+      daysEl.textContent = String(days);
+      hoursEl.textContent = String(hours).padStart(2,'0');
+      minutesEl.textContent = String(minutes).padStart(2,'0');
+      secondsEl.textContent = String(seconds).padStart(2,'0');
       infoEl.textContent = `Event time: ${fmtAthens.format(target)} (your time: ${fmtLocal.format(target)})`;
+      if(done){ document.querySelector('.count-title').textContent = 'It\'s metro time!'; }
     }
 
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
+    // Button pulse ripple (cursor-following on hover; centered on touch)
     document.querySelectorAll('.btn').forEach(btn => {
       btn.addEventListener('mousemove', e => {
         const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = e.clientX - rect.left; const y = e.clientY - rect.top;
         const pulse = document.createElement('span');
-        pulse.classList.add('pulse');
-        pulse.style.left = `${x}px`;
-        pulse.style.top = `${y}px`;
-        btn.appendChild(pulse);
-        pulse.addEventListener('animationend', () => pulse.remove());
+        pulse.classList.add('pulse'); pulse.style.left = x+'px'; pulse.style.top = y+'px';
+        btn.appendChild(pulse); pulse.addEventListener('animationend', () => pulse.remove());
       });
-
       btn.addEventListener('touchstart', e => {
         const pulse = document.createElement('span');
-        pulse.classList.add('pulse');
-        pulse.style.left = '50%';
-        pulse.style.top = '50%';
-        btn.appendChild(pulse);
-        pulse.addEventListener('animationend', () => pulse.remove());
-      });
+        pulse.classList.add('pulse'); pulse.style.left = '50%'; pulse.style.top = '50%';
+        btn.appendChild(pulse); pulse.addEventListener('animationend', () => pulse.remove());
+      }, {passive:true});
     });
 
+    // Copy link + Add to Calendar (.ics)
     document.getElementById('copyLink').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(location.href);
-        alert('Link copied!');
-      } catch (_) {
-        alert('Could not copy link.');
-      }
+      try { await navigator.clipboard.writeText(location.href); alert('Link copied!'); }
+      catch { alert('Could not copy link.'); }
     });
 
     document.getElementById('addCalendar').addEventListener('click', () => {
-      const dtStart = '20251211T063000';
-      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Metro Thessaloniki//Countdown//EN\nBEGIN:VEVENT\nUID:metro-thessaloniki-2025-12-11@local\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\..+/, 'Z')}\nSUMMARY:Thessaloniki Metro restart\nDTSTART;TZID=Europe/Athens:${dtStart}\nDTEND;TZID=Europe/Athens:20251211T073000\nDESCRIPTION:Thessaloniki Metro starts again.\nLOCATION:Thessaloniki, Greece\nEND:VEVENT\nEND:VCALENDAR`;
-      const blob = new Blob([ics], { type: 'text/calendar' });
+      const dtStart = '20251211T063000'; // Athens local
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Metro Thessaloniki//Countdown//EN\nBEGIN:VEVENT\nUID:metro-thessaloniki-2025-12-11@local\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g,'').replace(/\..+/,'Z')}\nSUMMARY:Thessaloniki Metro restart\nDTSTART;TZID=Europe/Athens:${dtStart}\nDTEND;TZID=Europe/Athens:20251211T073000\nDESCRIPTION:Thessaloniki Metro starts again.\nLOCATION:Thessaloniki, Greece\nEND:VEVENT\nEND:VCALENDAR`;
+      const blob = new Blob([ics], { type:'text/calendar' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'thessaloniki-metro.ics';
-      document.body.appendChild(a); a.click(); a.remove();
-      URL.revokeObjectURL(url);
+      const a = document.createElement('a'); a.href=url; a.download='thessaloniki-metro.ics';
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
   </script>
 </body>
