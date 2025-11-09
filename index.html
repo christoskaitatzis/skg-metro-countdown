@@ -6,113 +6,206 @@
   <title>Thessaloniki Metro — Countdown</title>
   <style>
     :root {
-      --bg: #0b1020;
-      --card: #121938cc;
-      --fg: #e9ecf1;
-      --muted: #a9b1c3;
-      --accent: #7cc4ff;
-      --accent-2: #9bffd6;
-      --danger: #ff7c7c;
+      --bg1: #0a1a33;
+      --bg2: #102a4d;
+      --bg3: #153f5f;
+      --accent: #48c6ef;
+      --accent-2: #6f86d6;
+      --fg: #f0f4ff;
+      --muted: #a8b3c9;
     }
-    @media (prefers-color-scheme: light) {
-      :root {
-        --bg: #f6f8fc;
-        --card: #ffffff;
-        --fg: #0b1020;
-        --muted: #5c6476;
-        --accent: #1769ff;
-        --accent-2: #0aa378;
-      }
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
     body {
-      background: radial-gradient(1000px 500px at 20% 0%, #1a2244 0%, var(--bg) 40%), var(--bg);
+      font-family: 'Inter', system-ui, sans-serif;
       color: var(--fg);
-      font-family: system-ui, -apple-system, Roboto, sans-serif;
+      background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), #0d223d);
+      background-size: 400% 400%;
+      animation: gradientShift 20s ease infinite;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-    }
-    .card {
-      background: var(--card);
-      border-radius: 20px;
-      padding: 24px 20px;
       text-align: center;
+      padding: 20px;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 32px 20px;
       width: 100%;
       max-width: 420px;
-      box-shadow: 0 8px 20px rgba(0,0,0,.3);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1.5s ease forwards 1s;
     }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     h1 {
       font-size: 1.8rem;
-      margin-bottom: 8px;
+      font-weight: 800;
+      color: var(--accent);
+      text-shadow: 0 0 10px rgba(72, 198, 239, 0.6);
+      margin-bottom: 10px;
+      opacity: 0;
+      animation: fadeIn 2s ease forwards;
     }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
     .sub {
       color: var(--muted);
-      margin-bottom: 24px;
       font-size: 0.95rem;
+      margin-bottom: 30px;
     }
-    .row {
+
+    .countdown {
       display: flex;
       justify-content: space-around;
-      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
+
     .tile {
-      flex: 1;
+      flex: 1 1 45%;
       background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 12px;
-      margin: 0 4px;
-      padding: 10px 0;
+      border-radius: 16px;
+      padding: 14px 0;
+      box-shadow: 0 0 10px rgba(72,198,239,0.15);
+      animation: fadeUp 1.5s ease forwards;
     }
+
     .num {
-      font-size: 2rem;
-      font-weight: bold;
-      line-height: 1.2;
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(111,134,214,0.5);
+      animation: glowPulse 3s ease-in-out infinite;
     }
+
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0 0 8px rgba(111,134,214,0.4); }
+      50% { text-shadow: 0 0 18px rgba(72,198,239,0.9); }
+    }
+
     .label {
       color: var(--muted);
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
+
     .meta {
+      margin-top: 20px;
       font-size: 0.85rem;
       color: var(--muted);
-      margin-top: 16px;
     }
+
+    .celebrate {
+      display: none;
+      margin-top: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--accent-2);
+      text-shadow: 0 0 8px rgba(111,134,214,0.6);
+    }
+
     .btn {
+      position: relative;
       display: inline-block;
       margin: 8px 4px;
       padding: 10px 14px;
       border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.15);
-      background: transparent;
+      background: rgba(255,255,255,0.05);
       color: var(--fg);
       font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      overflow: hidden;
     }
-    .btn:active { opacity: 0.8; }
-    .celebrate {
-      display: none;
-      color: var(--accent-2);
-      font-weight: 700;
-      margin-top: 20px;
+
+    /* Faint static underglow */
+    .btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(72,198,239,0.25) 0%, rgba(111,134,214,0.1) 70%, transparent 100%);
+      z-index: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn span {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Hover glow and pulse */
+    .btn:hover {
+      background: rgba(72,198,239,0.15);
+      border-color: rgba(72,198,239,0.6);
+      color: var(--accent);
+      box-shadow: 0 0 12px rgba(72,198,239,0.4);
+    }
+
+    .pulse {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(72,198,239,0.35) 0%, rgba(111,134,214,0.15) 70%, transparent 100%);
+      transform: scale(0);
+      opacity: 1;
+      animation: pulseEffect 0.8s ease-out forwards;
+      z-index: 1;
+    }
+
+    @keyframes pulseEffect {
+      to {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .num { font-size: 2rem; }
+      .tile { flex: 1 1 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Thessaloniki Metro restart</h1>
-    <p class="sub">Countdown to <strong>11 December 2025, 06:30</strong> Greece time.</p>
-    <div class="row">
+  <div class="container">
+    <h1>Thessaloniki Metro 2025</h1>
+    <p class="sub">Countdown to <strong>11 December 2025, 06:30</strong> (Greece time)</p>
+
+    <div class="countdown">
       <div class="tile"><div class="num" id="days">0</div><div class="label">Days</div></div>
       <div class="tile"><div class="num" id="hours">0</div><div class="label">Hours</div></div>
-      <div class="tile"><div class="num" id="minutes">0</div><div class="label">Min</div></div>
-      <div class="tile"><div class="num" id="seconds">0</div><div class="label">Sec</div></div>
+      <div class="tile"><div class="num" id="minutes">0</div><div class="label">Minutes</div></div>
+      <div class="tile"><div class="num" id="seconds">0</div><div class="label">Seconds</div></div>
     </div>
+
     <div class="meta" id="localInfo"></div>
-    <button class="btn" id="copyLink">Copy Link</button>
-    <button class="btn" id="addCalendar">Add to Calendar</button>
+
+    <button class="btn" id="copyLink"><span>Copy Link</span></button>
+    <button class="btn" id="addCalendar"><span>Add to Calendar</span></button>
+
     <div class="celebrate" id="celebrate">🚇 It’s metro time! Thessaloniki rolls again!</div>
   </div>
 
@@ -150,8 +243,31 @@
       infoEl.textContent = `Event time: ${fmtAthens.format(target)} (your time: ${fmtLocal.format(target)})`;
     }
 
-    setInterval(updateCountdown, 1000);
     updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const pulse = document.createElement('span');
+        pulse.classList.add('pulse');
+        pulse.style.left = `${x}px`;
+        pulse.style.top = `${y}px`;
+        btn.appendChild(pulse);
+        pulse.addEventListener('animationend', () => pulse.remove());
+      });
+
+      btn.addEventListener('touchstart', e => {
+        const pulse = document.createElement('span');
+        pulse.classList.add('pulse');
+        pulse.style.left = '50%';
+        pulse.style.top = '50%';
+        btn.appendChild(pulse);
+        pulse.addEventListener('animationend', () => pulse.remove());
+      });
+    });
 
     document.getElementById('copyLink').addEventListener('click', async () => {
       try {
@@ -162,7 +278,6 @@
       }
     });
 
-    
     document.getElementById('addCalendar').addEventListener('click', () => {
       const dtStart = '20251211T063000';
       const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Metro Thessaloniki//Countdown//EN\nBEGIN:VEVENT\nUID:metro-thessaloniki-2025-12-11@local\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\..+/, 'Z')}\nSUMMARY:Thessaloniki Metro restart\nDTSTART;TZID=Europe/Athens:${dtStart}\nDTEND;TZID=Europe/Athens:20251211T073000\nDESCRIPTION:Thessaloniki Metro starts again.\nLOCATION:Thessaloniki, Greece\nEND:VEVENT\nEND:VCALENDAR`;
