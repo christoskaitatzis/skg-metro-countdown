@@ -162,6 +162,7 @@
       }
     });
 
+    
     document.getElementById('addCalendar').addEventListener('click', () => {
       const dtStart = '20251211T063000';
       const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Metro Thessaloniki//Countdown//EN\nBEGIN:VEVENT\nUID:metro-thessaloniki-2025-12-11@local\nDTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').replace(/\..+/, 'Z')}\nSUMMARY:Thessaloniki Metro restart\nDTSTART;TZID=Europe/Athens:${dtStart}\nDTEND;TZID=Europe/Athens:20251211T073000\nDESCRIPTION:Thessaloniki Metro starts again.\nLOCATION:Thessaloniki, Greece\nEND:VEVENT\nEND:VCALENDAR`;
